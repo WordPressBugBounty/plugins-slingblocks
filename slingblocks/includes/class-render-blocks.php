@@ -357,7 +357,7 @@ class SLINGBLOCKS_Render_Block {
 			$column_bgvideo = $settings['backgroundVideo']['desktop'];
 
 			if ( isset( $column_bgvideo['local'] ) && ! empty( $column_bgvideo['local'] ) ) {
-				$output .= sprintf( '<video autoplay %2$s><source src="%1$s" type="video/mp4"/></video>', $column_bgvideo['local'], slingblocks_attr( 'columns-video', array(
+				$output .= sprintf( '<video autoplay %2$s><source src="%1$s" type="video/mp4"/></video>', esc_url( $column_bgvideo['local'] ), slingblocks_attr( 'columns-video', array(
 					'muted'   => isset( $column_bgvideo['mute'] ) ? $column_bgvideo['mute'] : null,
 					'loop'    => isset( $column_bgvideo['loop'] ) ? $column_bgvideo['loop'] : null,
 					'control' => isset( $column_bgvideo['control'] ) ? $column_bgvideo['control'] : null,
@@ -614,7 +614,7 @@ class SLINGBLOCKS_Render_Block {
 
 		$defaults = array(
 			'type'    => 'solid',
-			'content' => __( 'Button' ),
+			'content' => __( 'Button', 'slingblocks' ),
 			'anchor'  => ''
 		);
 
@@ -772,7 +772,7 @@ class SLINGBLOCKS_Render_Block {
 		$output  .= sprintf( '<div %1$s>', slingblocks_attr( 'icon-list', array(
 			'class' => implode( ' ', $classNames ),
 		), $settings ) );
-		$blockID = $settings['anchor'] ? 'id="' . $settings['anchor'] . '"' : '';
+		$blockID = $settings['anchor'] ? 'id="' . esc_attr( $settings['anchor']) . '"' : '';
 		$output  .= '<ul class="bwf-icon-list" ' . $blockID . '>';
 
 		$listCount = isset( $settings['listCount'] ) ? $settings['listCount'] : 1;

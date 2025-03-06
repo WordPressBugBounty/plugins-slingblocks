@@ -2,14 +2,14 @@
 /**
  * Plugin Name: SlingBlocks – Gutenberg Blocks by FunnelKit (Formerly WooFunnels)
  * Description: A minimalist Gutenberg Block Plugin that extends Gutenberg to provide page building capabilities.
- * Version: 1.5.0
+ * Version: 1.6.0
  * Text Domain: slingblocks
  * Plugin URI: https://funnelkit.com/
  * Author: FunnelKit (formerly WooFunnels)
  * Author URI: https://funnelkit.com
  * Domain Path: /languages
  * Requires at least: 5.6
- * Tested up to: 6.6
+ * Tested up to: 6.7.2
  * Requires PHP: 7.2
  *
  * @package slingblocks
@@ -246,7 +246,7 @@ if ( ! class_exists( 'SLINGBLOCKS' ) ) {
 			wp_enqueue_style( 'slingblocks-editor', $editor_dir . $style_path, array(), $version );
 
 			if ( function_exists( 'wp_set_script_translations' ) ) {
-				wp_set_script_translations( 'slingblocks', SLINGBLOCKS_I18N );
+				wp_set_script_translations( 'slingblocks-editor', SLINGBLOCKS_I18N );
 			}
 
 			/**
