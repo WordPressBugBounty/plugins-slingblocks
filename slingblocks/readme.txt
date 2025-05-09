@@ -2,7 +2,7 @@
 Contributors: amans2k, xlplugins, teamwoofunnels
 Tags: blocks, gutenberg, page builder, marketing, accordion, block editor, svg icons, wordpress blocks
 Requires at least: 5.6
-Tested up to: 6.7.2
+Tested up to: 6.8.0
 Requires PHP: 7.2
 Stable tag: 1.6.0
 License: GPL-2.0-or-later

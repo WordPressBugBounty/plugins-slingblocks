@@ -9,7 +9,7 @@
  * Author URI: https://funnelkit.com
  * Domain Path: /languages
  * Requires at least: 5.6
- * Tested up to: 6.7.2
+ * Tested up to: 6.8.0
  * Requires PHP: 7.2
  *
  * @package slingblocks
