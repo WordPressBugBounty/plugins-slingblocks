@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the SlingBlocks – Gutenberg Blocks by FunnelKit (Formerly WooFunnels) plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: SlingBlocks – Gutenberg Blocks by FunnelKit (Formerly WooFunnels) 1.6.0\n"
+"Project-Id-Version: SlingBlocks – Gutenberg Blocks by FunnelKit (Formerly WooFunnels) 1.7.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/slingblocks\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-03-05T12:11:26+00:00\n"
+"POT-Creation-Date: 2025-08-18T07:16:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: slingblocks\n"
@@ -1763,7 +1763,7 @@ msgstr ""
 #: dist/slingblocks-editor.js:1
 #: dist/slingblocks-editor.js:7
 #: src/components/border/index.js:101
-#: src/components/font/index.js:154
+#: src/components/font/index.js:155
 msgid "Not Set"
 msgstr ""
 
@@ -1843,17 +1843,17 @@ msgid "Font Family"
 msgstr ""
 
 #: dist/slingblocks-editor.js:7
-#: src/components/font/index.js:87
+#: src/components/font/index.js:88
 msgid "Select a font family"
 msgstr ""
 
 #: dist/slingblocks-editor.js:7
-#: src/components/font/index.js:130
+#: src/components/font/index.js:131
 msgid "Font Size"
 msgstr ""
 
 #: dist/slingblocks-editor.js:7
-#: src/components/font/index.js:150
+#: src/components/font/index.js:151
 msgid "Weight"
 msgstr ""
 

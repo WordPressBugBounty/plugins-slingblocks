@@ -1078,8 +1078,8 @@ class SLINGBLOCKS_Render_Block {
 				'cookie_name'       => $cookie_data ? $cookie_name : null,
 				'bwf-date'          => $date_style,
 				'end_date'          => $end_date,
-				'msgAfter'          => isset( $settings['expiryType'] ) && 'message' === $settings['expiryType'] ? ( isset( $settings['expiryTitle'] ) ? $settings['expiryTitle'] : 'Countdown is finished!' ) : null,
-				'expiryRedirectUrl' => isset( $settings['expiryType'] ) && 'redirect' === $settings['expiryType'] ? ( isset( $settings['expiryRedirectUrl'] ) ? $settings['expiryRedirectUrl'] : null ) : null,
+				'msgAfter'          => isset( $settings['expiryType'] ) && 'message' === $settings['expiryType'] ? ( isset( $settings['expiryTitle'] ) ? $this->bwf_kses_post(html_entity_decode( $settings['expiryTitle'] ) ) : 'Countdown is finished!' ) : null,
+				'expiryRedirectUrl' => isset( $settings['expiryType'] ) && 'redirect' === $settings['expiryType'] ? ( isset( $settings['expiryRedirectUrl'] ) ? esc_url( $settings['expiryRedirectUrl'] ) : null ) : null,
 				'funnel-next-step'  => isset( $settings['expiryType'] ) && 'funnel-next-step' === $settings['expiryType'] ? $funnel_redirect_link : null,
 			), $settings ) );
 			$settings['dayLabel']    = isset( $settings['dayLabel'] ) ? $settings['dayLabel'] : 'Days';

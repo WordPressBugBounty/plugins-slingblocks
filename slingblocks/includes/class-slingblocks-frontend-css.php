@@ -52,7 +52,7 @@ class SLINGBLOCKS_Frontend_CSS {
 	 * Class Constructor.
 	 */
 	public function __construct() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_inline_css' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_inline_css' ),999 );
 	}
 
 	/**
@@ -64,6 +64,9 @@ class SLINGBLOCKS_Frontend_CSS {
 
 		if ( did_action( 'wfacp_after_template_found' ) ) {
 			$aero_instance = wfacp_template();
+			if ( ! is_null( $aero_instance ) && 'gutenberg' !== $aero_instance->get_template_type()) {
+					return;
+			}
 			// do not overrides global $post for embed & customizer template
 			if ( ! is_null( $aero_instance ) && ! $aero_instance instanceof WFACP_Pre_Built ) {
 				$post_id = WFACP_Common::get_id();
