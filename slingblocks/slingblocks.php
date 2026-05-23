@@ -2,15 +2,14 @@
 /**
  * Plugin Name: SlingBlocks – Gutenberg Blocks by FunnelKit (Formerly WooFunnels)
  * Description: A minimalist Gutenberg Block Plugin that extends Gutenberg to provide page building capabilities.
- * Version: 1.8.0
+ * Version: 1.8.1
  * Text Domain: slingblocks
  * Plugin URI: https://funnelkit.com/
  * Author: FunnelKit (formerly WooFunnels)
  * Author URI: https://funnelkit.com
  * Domain Path: /languages
  * Requires at least: 5.6
- * Tested up to: 7.0.0
- * Requires PHP: 7.2
+ * Requires PHP: 7.4
  *
  * @package slingblocks
  */
@@ -23,6 +22,8 @@ if ( ! class_exists( 'SLINGBLOCKS' ) ) {
 	 * SLINGBLOCKS
 	 */
 	class SLINGBLOCKS {
+
+		const DEFAULT_FONT_MAX_LENGTH = 100;
 
 		/**
 		 * __construct
@@ -119,15 +120,37 @@ if ( ! class_exists( 'SLINGBLOCKS' ) ) {
 				'',
 				'bwfblock_default_font',
 				array(
-					'show_in_rest' => true,
-					'single'       => true,
-					'type'         => 'string',
+					'show_in_rest'      => true,
+					'single'            => true,
+					'type'              => 'string',
+					'sanitize_callback' => array( $this, 'sanitize_default_font' ),
+					'auth_callback'     => array( $this, 'auth_default_font_meta' ),
 				)
 			);
 
 			// Add Custom Template
 			add_filter( 'theme_post_templates', array( $this, 'wp_add_page_templates' ) );
 			add_filter( 'theme_page_templates', array( $this, 'wp_add_page_templates' ) );
+		}
+
+		/**
+		 * Restrict default-font meta to a safe font-name shape so the value
+		 * cannot break out of the CSS `font-family:` declaration or inject
+		 * extra query parameters into the Google Fonts URL.
+		 */
+		public function sanitize_default_font( $value ) {
+			if ( ! is_scalar( $value ) ) {
+				return '';
+			}
+			$value = preg_replace( '/[^A-Za-z0-9 ,-]/', '', trim( (string) $value ) );
+			return mb_substr( $value, 0, self::DEFAULT_FONT_MAX_LENGTH );
+		}
+
+		/**
+		 * Gate REST writes to the default-font meta to users who can edit the post.
+		 */
+		public function auth_default_font_meta( $allowed, $meta_key, $post_id ) {
+			return current_user_can( 'edit_post', $post_id );
 		}
 
 		// Add class in editor body

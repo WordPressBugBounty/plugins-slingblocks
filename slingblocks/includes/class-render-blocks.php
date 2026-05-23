@@ -52,6 +52,90 @@ class SLINGBLOCKS_Render_Block {
 	}
 
 	/**
+	 * Sanitize SVG markup before echoing it to the frontend. Allowlists the
+	 * elements and attributes used by FontAwesome-style icons; drops every
+	 * `on*` event handler, `<script>`, `<foreignObject>`, SMIL animation
+	 * elements, and `href`/`xlink:href` (which can carry `javascript:`).
+	 */
+	public function bwf_kses_svg( $svg ) {
+		return wp_kses( (string) $svg, $this->slb_allowed_svg_tags() );
+	}
+
+	/**
+	 * Allowlist for SVG icon markup. Kept tight on purpose — covers the
+	 * elements/attributes FontAwesome and similar icon SVGs actually use.
+	 * Notably excluded: script, foreignObject, animate*, set, all on* attrs,
+	 * href/xlink:href (javascript: vector), and style (CSS not parsed by kses).
+	 */
+	protected function slb_allowed_svg_tags() {
+		$shared_attrs = array(
+			'class'             => true,
+			'id'                => true,
+			'role'              => true,
+			'aria-hidden'       => true,
+			'aria-label'        => true,
+			'aria-labelledby'   => true,
+			'data-*'            => true,
+			'fill'              => true,
+			'fill-rule'         => true,
+			'fill-opacity'      => true,
+			'clip-rule'         => true,
+			'clip-path'         => true,
+			'stroke'            => true,
+			'stroke-width'      => true,
+			'stroke-linecap'    => true,
+			'stroke-linejoin'   => true,
+			'stroke-miterlimit' => true,
+			'stroke-dasharray'  => true,
+			'stroke-dashoffset' => true,
+			'stroke-opacity'    => true,
+			'opacity'           => true,
+			'transform'         => true,
+		);
+
+		// NOTE: wp_kses lowercases attribute and element names when matching
+		// against this allowlist, so keys here must be lowercase. Browsers
+		// still recognise lowercase viewBox/preserveAspectRatio/etc. on SVG.
+		return array(
+			'svg'            => array_merge(
+				$shared_attrs,
+				array(
+					'xmlns'               => true,
+					'xmlns:xlink'         => true,
+					'viewbox'             => true,
+					'width'               => true,
+					'height'              => true,
+					'preserveaspectratio' => true,
+					'focusable'           => true,
+					'version'             => true,
+				)
+			),
+			'g'              => $shared_attrs,
+			'defs'           => array(),
+			'title'          => array(),
+			'desc'           => array(),
+			'symbol'         => array_merge( $shared_attrs, array( 'viewbox' => true ) ),
+			'path'           => array_merge( $shared_attrs, array( 'd' => true ) ),
+			'circle'         => array_merge( $shared_attrs, array( 'cx' => true, 'cy' => true, 'r' => true ) ),
+			'ellipse'        => array_merge( $shared_attrs, array( 'cx' => true, 'cy' => true, 'rx' => true, 'ry' => true ) ),
+			'rect'           => array_merge( $shared_attrs, array( 'x' => true, 'y' => true, 'width' => true, 'height' => true, 'rx' => true, 'ry' => true ) ),
+			'line'           => array_merge( $shared_attrs, array( 'x1' => true, 'y1' => true, 'x2' => true, 'y2' => true ) ),
+			'polygon'        => array_merge( $shared_attrs, array( 'points' => true ) ),
+			'polyline'       => array_merge( $shared_attrs, array( 'points' => true ) ),
+			'lineargradient' => array_merge( $shared_attrs, array( 'x1' => true, 'y1' => true, 'x2' => true, 'y2' => true, 'gradientunits' => true, 'gradienttransform' => true, 'spreadmethod' => true ) ),
+			'radialgradient' => array_merge( $shared_attrs, array( 'cx' => true, 'cy' => true, 'r' => true, 'fx' => true, 'fy' => true, 'gradientunits' => true, 'gradienttransform' => true, 'spreadmethod' => true ) ),
+			'stop'           => array(
+				'offset'       => true,
+				'stop-color'   => true,
+				'stop-opacity' => true,
+				'class'        => true,
+			),
+			'clippath'       => array_merge( $shared_attrs, array( 'clippathunits' => true ) ),
+			'mask'           => array_merge( $shared_attrs, array( 'maskunits' => true, 'maskcontentunits' => true, 'x' => true, 'y' => true, 'width' => true, 'height' => true ) ),
+		);
+	}
+
+	/**
 	 * Register our dynamic blocks.
 	 *
 	 * @since 1.2.0
@@ -368,7 +452,7 @@ class SLINGBLOCKS_Render_Block {
 				array(
 					'id'         => $settings['anchor'],
 					'class'      => implode( ' ', $classNames ),
-					'bwf-href'   => isset( $settings['link'] ) ? $settings['link'] : '',
+					'bwf-href'   => isset( $settings['link'] ) ? esc_url( $settings['link'] ) : '',
 					'bwf-newtab' => isset( $settings['linkNewTab'] ) && $settings['linkNewTab'] ? '_blank' : '',
 				),
 				$settings
@@ -512,7 +596,7 @@ class SLINGBLOCKS_Render_Block {
 				array(
 					'id'         => $settings['anchor'],
 					'class'      => implode( ' ', $classNames ),
-					'bwf-href'   => isset( $settings['link'] ) ? $settings['link'] : '',
+					'bwf-href'   => isset( $settings['link'] ) ? esc_url( $settings['link'] ) : '',
 					'bwf-newtab' => isset( $settings['linkNewTab'] ) && $settings['linkNewTab'] ? '_blank' : '',
 				),
 				$settings
@@ -711,7 +795,7 @@ class SLINGBLOCKS_Render_Block {
 
 		// Button Icon Left Side
 		if ( isset( $button['icon'] ) && ! empty( $button['icon'] ) && 'left' === $button['iconPos'] ) {
-			$output .= '<span class="bwf-icon-inner-svg bwf-left-icon">' . $button['icon'] . '</span>';
+			$output .= '<span class="bwf-icon-inner-svg bwf-left-icon">' . $this->bwf_kses_svg( $button['icon'] ) . '</span>';
 		}
 
 		// Button content
@@ -719,13 +803,13 @@ class SLINGBLOCKS_Render_Block {
 
 		// Button Icon Right Side
 		if ( isset( $button['icon'] ) && ! empty( $button['icon'] ) && 'right' === $button['iconPos'] ) {
-			$output .= '<span class="bwf-icon-inner-svg bwf-right-icon">' . $button['icon'] . '</span>';
+			$output .= '<span class="bwf-icon-inner-svg bwf-right-icon">' . $this->bwf_kses_svg( $button['icon'] ) . '</span>';
 		}
 
 		// Button Secondary Text (Sub heading)
 		if ( isset( $settings['secondaryContentEnable'] ) && ! empty( $settings['secondaryContentEnable'] ) ) {
 			$buttonSubText = isset( $settings['secondaryContent'] ) ? $settings['secondaryContent'] : '';
-			$output       .= '<span class="bwf-btn-sub-text">' . $buttonSubText . '</span>';
+			$output       .= '<span class="bwf-btn-sub-text">' . $this->bwf_kses_post( $buttonSubText ) . '</span>';
 		}
 
 		$output .= '</a>';
@@ -857,7 +941,7 @@ class SLINGBLOCKS_Render_Block {
 				$icon = $settings['items'][ $i ]['icon'] ? $settings['items'][ $i ]['icon'] : ( ! empty( $settings['defaultIcon'] ) ? $settings['defaultIcon'] : $defaultIcon );
 				$text = isset( $settings['items'][ $i ]['text'] ) ? $this->bwf_kses_post( $settings['items'][ $i ]['text'] ) : '';
 
-				$output .= '<span class="bwf-icon-inner-svg">' . $icon;
+				$output .= '<span class="bwf-icon-inner-svg">' . $this->bwf_kses_svg( $icon );
 				$output .= '</span>';
 				$output .= '<span class="bwf-icon-list-text">' . $text;
 				$output .= '</span>';
@@ -933,7 +1017,7 @@ class SLINGBLOCKS_Render_Block {
 						slingblocks_attr(
 							'icon-link',
 							array(
-								'href'   => $settings['icons'][ $i ]['link'],
+								'href'   => esc_url( $settings['icons'][ $i ]['link'] ),
 								'target' => $target,
 								'rel'    => trim( $relation ),
 								'class'  => 'bwf-icon-link',
@@ -944,7 +1028,7 @@ class SLINGBLOCKS_Render_Block {
 				}
 			}
 			$icon    = isset( $settings['icons'][ $i ]['icon'] ) ? $settings['icons'][ $i ]['icon'] : $defaultIcon;
-			$output .= $icon;
+			$output .= $this->bwf_kses_svg( $icon );
 
 			if ( isset( $settings['icons'] ) && isset( $settings['icons'][ $i ] ) ) {
 				$output .= '</a>';
@@ -1017,7 +1101,7 @@ class SLINGBLOCKS_Render_Block {
 		);
 
 		if ( isset( $settings['enableTitle'] ) && $settings['enableTitle'] && isset( $settings['titleContent'] ) ) {
-			$output .= '<div class="bwf-progress-title">' . $settings['titleContent'] . '</div>';
+			$output .= '<div class="bwf-progress-title">' . $this->bwf_kses_post( $settings['titleContent'] ) . '</div>';
 		}
 		$content = 'Progress...';
 		if ( isset( $settings['content'] ) ) {

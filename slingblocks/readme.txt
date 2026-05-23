@@ -4,7 +4,7 @@ Tags: blocks, gutenberg, page builder, marketing, accordion, block editor, svg i
 Requires at least: 5.6
 Tested up to: 7.0.0
 Requires PHP: 7.2
-Stable tag: 1.8.0
+Stable tag: 1.8.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,9 @@ There are two ways to install SlingBlocks.
 2. Download the .zip from WordPress.org, and upload the folder to the `/wp-content/plugins/` directory via FTP.
 
 == Changelog ==
+
+= 1.8.1 (May 23, 2026) =
+* Improved: Hardened plugin security. (#216)
 
 = 1.8.0 (Apr 24, 2026) =
 * Compatible upto WordPress 7.0
