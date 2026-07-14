@@ -94,7 +94,7 @@ There are two ways to install SlingBlocks.
 == Changelog ==
 
 = 1.8.1 (May 23, 2026) =
-* Improved: Hardened plugin security. (#216)
+* Improved: Minor improvements in icon block. (#216)
 
 = 1.8.0 (Apr 24, 2026) =
 * Compatible upto WordPress 7.0
